@@ -4,10 +4,10 @@ from mtypes.shape import Rect
 
 class Space(UObject):
 
-    def __init__(self, width: int, height: int, density: int):
+    def __init__(self, width: int = 800, height: int = 600, density: int = 10):
         self._width = width
         self._height = height
-        self._density = density
+        self._density = density   # regions will be 80x60 by default
 
         region_w = int(width / density)
         region_h = int(height / density)

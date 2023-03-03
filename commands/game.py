@@ -9,7 +9,7 @@ class GameCommand(Command):
     def __init__(self):
         self._queue = Queue()
         self._game_objects = []
-        self._battle_field = Space(width=800, height=600, density=10)  # regions will be 80x60
+        self._battle_field = Space()
         ioc.container.IoC.resolve('Scope.New', 0).execute()  # 0 args is root scope is parent for new game
         self._scope = ioc.container.IoC.scopes.current_scope
         ioc.container.IoC.resolve('IoC.Register', 'Queue', self._get_game_queue).execute()
