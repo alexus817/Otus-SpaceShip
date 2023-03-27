@@ -8,13 +8,13 @@ from commands.log_writer import LogWriter
 from commands.move import Move
 from main import log
 from commands.rotate import Rotate
-from server import server
-from server.server import Server
+from server import __main__
+from server.__main__ import Server
 from errors.exception_handler import ExceptionHandler
 
 Q = Queue()
 
-SERVER = Server()
+# SERVER = Server(("localhost", 7777, b''))
 
 EX_HANDLER = ExceptionHandler(Q)
 

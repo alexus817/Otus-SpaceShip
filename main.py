@@ -1,5 +1,6 @@
 import logging
-from server.server import Server
+from server.__main__ import Server
+
 # import sys
 # from typing import Any
 #
@@ -38,12 +39,13 @@ log = logging.getLogger(__name__)
 
 
 if __name__ == '__main__':
-    s = Server()
+    s = Server(auth_service_addr=("127.0.0.1", 5578, bytes("P@$$w0rd", "UTF8")))
     s.start()
     # s.put_command(LogWriter(ValueError('test')))
     # IoC.resolve('Worker.New', s).execute()
     # IoC.resolve('Game.New').execute()
     # s.put_command(IoC.resolve('Game.New'))
+
     s.stop()
     print('END')
 
