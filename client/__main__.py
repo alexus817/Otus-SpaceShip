@@ -1,5 +1,4 @@
 import json
-import pickle
 from multiprocessing.connection import Client
 from struct import pack
 from time import sleep
@@ -42,7 +41,8 @@ with Client(address, authkey=bytes(password, "UTF8")) as conn:
     print(game_id)
     game_id = game_id.replace("GAME_ID: ", "")
 
-    spaceship = pack("3i", int(game_id), -1, 14) + bytes(   # 14 -> operation = Create_Object see server.message.operation
+    # 14 -> operation = Create_Object see server.message.operation
+    spaceship = pack("3i", int(game_id), -1, 14) + bytes(
         json.dumps(
             {
                 "type": "SpaceShip",
@@ -59,7 +59,8 @@ with Client(address, authkey=bytes(password, "UTF8")) as conn:
     print(spaceship_id)
     spaceship_id = spaceship_id.replace("OBJECT_ID: ", "")
 
-    move = pack("3i", int(game_id), int(spaceship_id), 1) + bytes(   # 1 -> operation = Command_Move see server.message.operation
+    # 1 -> operation = Command_Move see server.message.operation
+    move = pack("3i", int(game_id), int(spaceship_id), 1) + bytes(
         json.dumps(
             {
                 "jwt": token
@@ -70,8 +71,6 @@ with Client(address, authkey=bytes(password, "UTF8")) as conn:
     conn.send(move)
     spaceship_id = conn.recv()
     print(spaceship_id)
-
-
 
     sleep(5)
     i = input()

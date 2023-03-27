@@ -1,7 +1,7 @@
 import time
 import jwt
 import db
-from .models import User, Game
+from .models import User
 
 
 class Auth:

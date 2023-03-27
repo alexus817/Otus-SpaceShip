@@ -73,7 +73,8 @@ class AuthService:
                     if jwt:
                         data = {"id": message.data["id"], "user_id": auth.user.id, "jwt": jwt}
                     else:
-                        data = {"id": message.data["id"], "jwt": "error get jwt"}   # todo: need auth status success or failed in message format
+                        # todo: need auth status success or failed in message format
+                        data = {"id": message.data["id"], "jwt": "error get jwt"}
                 else:
                     data = {"id": message.data["id"], "jwt": "invalid user or password"}
 

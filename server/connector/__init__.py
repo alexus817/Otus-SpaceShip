@@ -1,7 +1,6 @@
 import json
 import selectors
 import threading
-import typing
 
 from multiprocessing.connection import Listener, Client, Connection
 from struct import unpack
@@ -165,7 +164,7 @@ class AuthServiceConnector:
                 self._connection.send(data)
                 log.info(f"AuthConnector send {data}")
         except IOError as ex:
-            log.error(f"AuthConnector sending failed: {data}")  # Pass or Die
+            log.error(f"AuthConnector sending failed: {data} {ex=}")  # Pass or Die
 
     def recv(self):
         while not self._stop_event.is_set():

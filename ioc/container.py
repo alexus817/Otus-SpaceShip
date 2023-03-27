@@ -73,7 +73,7 @@ class GameObjects:
     def obj_can_access(self, obj: UObject, token: str) -> bool:
         return token == self._store[obj.get_property("obj_id")]["token"]
 
-    def get_object(self, obj_id: int) -> UObject|None:
+    def get_object(self, obj_id: int) -> UObject | None:
         return self._store.get(obj_id, {})
 
     @property

@@ -1,5 +1,4 @@
 from interfaces.command import Command
-from interfaces.uobject import UObject
 from ioc.container import IoC
 from objects import TypeObjects
 

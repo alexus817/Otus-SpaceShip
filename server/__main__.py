@@ -5,12 +5,10 @@ from queue import Queue, Empty
 from random import choice
 import threading
 import logging
-import typing
 from time import sleep
 
 # from commands.game import GameCommand
 import commands
-from auth.models import Game
 from db import GAMES
 # from commands.worker import NewWorker, StopWorker, SoftStopWorker
 from errors.exception_handler import ExceptionHandler
@@ -141,24 +139,31 @@ class Server:
     def message_router(self, message: Message):
         match message.command_info.operation:
             case OPERATION.Get_Token:
-                message.command_info.args.update({"id": message.conn})  # todo: move to Message.conn and AuthService support that
+                # todo: move to Message.conn and AuthService support that
+                message.command_info.args.update({"id": message.conn})
                 self._auth_connector.send(
-                    struct.pack("I", message.command_info.operation.value) + bytes(json.dumps(message.command_info.args), "UTF8")
-                )
+                    struct.pack(
+                        "I",
+                        message.command_info.operation.value) + bytes(json.dumps(message.command_info.args), "UTF8"))
                 return
             case OPERATION.Auth_Response:
                 # todo: message.command_info.args["id"] -> message.conn
-                self._connector.clients[message.command_info.args["id"]]["connection"].send("TOKEN: "+message.command_info.args["jwt"])
+                self._connector.clients[message.command_info.args["id"]]["connection"].send(
+                    "TOKEN: " + message.command_info.args["jwt"])
 
                 # add user token to his games after success auth
                 if len(message.command_info.args["jwt"]) > 100:  # todo: temporary hack. need check auth status
-                    user_games_id = [_id for _id, games in self.games.items() if int(message.command_info.args["user_id"]) in games["players"]]
-                    [self.games[game_id]["tokens"].append(message.command_info.args["jwt"]) for game_id in user_games_id]
+                    user_games_id = [_id
+                                     for _id, games in self.games.items()
+                                     if int(message.command_info.args["user_id"]) in games["players"]]
+                    [self.games[game_id]["tokens"].append(message.command_info.args["jwt"])
+                     for game_id in user_games_id]
                 return
             case OPERATION.Game_New:
                 worker = self.get_worker()  # get free (now random) worker
                 game_id = self.new_game(worker)
-                self.games[game_id]["tokens"].append(message.command_info.args["jwt"])  # add first token. other tokens added when users auth completed
+                # add first token. other tokens added when users auth completed
+                self.games[game_id]["tokens"].append(message.command_info.args["jwt"])
                 self.games[game_id]["players"] = message.command_info.args["players"]  # MIND: this mast be in IoC!!!
                 message.command_info.args.pop("jwt")
                 message.command_info.args.pop("players")
@@ -189,7 +194,8 @@ class Server:
         return new Game_ID
         """
         game_id = len(self.games)
-        self.games.update({game_id: {"worker": worker, "tokens": [], "players": [], "queue": Queue()}})  # game <-> worker matching
+        # game <-> worker matching
+        self.games.update({game_id: {"worker": worker, "tokens": [], "players": [], "queue": Queue()}})
         return game_id
 
     def stop_game(self, game_id: int) -> None:

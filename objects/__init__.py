@@ -1,5 +1,3 @@
-from enum import Enum
-
 from .bullet import Bullet
 from .space import Space
 from .spaceship import SpaceShip
